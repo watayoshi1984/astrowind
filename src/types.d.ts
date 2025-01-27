@@ -1,66 +1,33 @@
-import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
-import type { HTMLAttributes, ImageMetadata } from 'astro/types';
-
-export interface Post {
-  /** A unique ID number that identifies a post. */
-  id: string;
-
-  /** A post’s unique slug – part of the post’s URL based on its name, i.e. a post called “My Sample Page” has a slug “my-sample-page”. */
-  slug: string;
-
-  /**  */
-  permalink: string;
-
-  /**  */
-  publishDate: Date;
-  /**  */
-  updateDate?: Date;
-
-  /**  */
-  title: string;
-  /** Optional summary of post content. */
-  excerpt?: string;
-  /**  */
-  image?: ImageMetadata | string;
-
-  /**  */
-  category?: Taxonomy;
-  /**  */
-  tags?: Taxonomy[];
-  /**  */
-  author?: string;
-
-  /**  */
-  metadata?: MetaData;
-
-  /**  */
-  draft?: boolean;
-
-  /**  */
-  Content?: AstroComponentFactory;
-  content?: string;
-
-  /**  */
-  readingTime?: number;
-}
-
-export interface Taxonomy {
-  slug: string;
-  title: string;
-}
-
 export interface MetaData {
   title?: string;
   ignoreTitleTemplate?: boolean;
-
   canonical?: string;
-
   robots?: MetaDataRobots;
-
   description?: string;
-
   openGraph?: MetaDataOpenGraph;
   twitter?: MetaDataTwitter;
+  type?: string;
+  breadcrumb?: Array<{
+    text: string;
+    href?: string;
+  }>;
+  publishDate?: string;  // publishedDateの代わりにpublishDateを使用
+  updateDate?: string;
+}
+
+export interface Post {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string;
+  image?: string;
+  publishDate: string;
+  updateDate?: string;
+  category?: string;
+  tags?: Array<string>;
+  author?: string;
+  metadata?: MetaData;
+  draft?: boolean;
 }
 
 export interface MetaDataRobots {
@@ -102,7 +69,7 @@ export interface Widget {
   id?: string;
   isDark?: boolean;
   bg?: string;
-  classes?: Record<string, string | Record<string, string>>;
+  classes?: Record<string, string>;
 }
 
 export interface Headline {
@@ -112,81 +79,50 @@ export interface Headline {
   classes?: Record<string, string>;
 }
 
-interface TeamMember {
-  name?: string;
-  job?: string;
-  image?: Image;
-  socials?: Array<Social>;
-  description?: string;
-  classes?: Record<string, string>;
-}
-
-interface Social {
+interface SocialLink {
   icon?: string;
   href?: string;
+  label?: string;
 }
 
-export interface Stat {
-  amount?: number | string;
-  title?: string;
+export interface Link {
+  text?: string;
+  href?: string;
+  ariaLabel?: string;
   icon?: string;
 }
 
-export interface Item {
-  title?: string;
-  description?: string;
+export interface ActionLink extends Link {
+  type?: string;
+  targetBlank?: boolean;
+  class?: string;
+}
+
+export interface MenuLink extends Link {
+  links?: Array<Link>;
+}
+
+export interface Button {
+  title: string;
+  type?: string;
+  class?: string;
+}
+
+export interface Tab {
+  title: string;
+  link?: string;
   icon?: string;
-  classes?: Record<string, string>;
-  callToAction?: CallToAction;
-  image?: Image;
 }
 
-export interface Price {
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  price?: number | string;
-  period?: string;
-  items?: Array<Item>;
-  callToAction?: CallToAction;
-  hasRibbon?: boolean;
-  ribbonTitle?: string;
-}
-
-export interface Testimonial {
-  title?: string;
-  testimonial?: string;
-  name?: string;
-  job?: string;
-  image?: string | unknown;
-}
-
-export interface Input {
-  type: HTMLInputTypeAttribute;
-  name: string;
-  label?: string;
-  autocomplete?: string;
-  placeholder?: string;
-}
-
-export interface Textarea {
-  label?: string;
-  name?: string;
-  placeholder?: string;
-  rows?: number;
-}
-
-export interface Disclaimer {
-  label?: string;
-}
-
-// COMPONENTS
-export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
+export interface MenuItem {
   text?: string;
   icon?: string;
-  classes?: Record<string, string>;
-  type?: 'button' | 'submit' | 'reset';
+  href?: string;
+  ariaLabel?: string;
+  type?: string;
+  targetBlank?: boolean;
+  class?: string;
+  links?: Array<MenuItem>;
 }
 
 export interface ItemGrid {
@@ -196,91 +132,23 @@ export interface ItemGrid {
   classes?: Record<string, string>;
 }
 
-export interface Collapse {
-  iconUp?: string;
-  iconDown?: string;
-  items?: Array<Item>;
-  columns?: number;
-  classes?: Record<string, string>;
-}
-
-export interface Form {
-  inputs?: Array<Input>;
-  textarea?: Textarea;
-  disclaimer?: Disclaimer;
-  button?: string;
+export interface Item {
+  title?: string;
   description?: string;
+  icon?: string;
+  classes?: Record<string, string>;
+  callToAction?: ActionLink;
+  image?: Image;
 }
 
-// WIDGETS
-export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' | 'classes'> {
-  content?: string;
-  actions?: string | CallToAction[];
-  image?: string | unknown;
-}
-
-export interface Team extends Omit<Headline, 'classes'>, Widget {
-  team?: Array<TeamMember>;
-}
-
-export interface Stats extends Omit<Headline, 'classes'>, Widget {
-  stats?: Array<Stat>;
-}
-
-export interface Pricing extends Omit<Headline, 'classes'>, Widget {
-  prices?: Array<Price>;
-}
-
-export interface Testimonials extends Omit<Headline, 'classes'>, Widget {
-  testimonials?: Array<Testimonial>;
-  callToAction?: CallToAction;
-}
-
-export interface Brands extends Omit<Headline, 'classes'>, Widget {
-  icons?: Array<string>;
-  images?: Array<Image>;
-}
-
-export interface Features extends Omit<Headline, 'classes'>, Widget {
-  image?: string | unknown;
-  video?: Video;
+export interface Price {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  price: number;
+  period?: string;
   items?: Array<Item>;
-  columns?: number;
-  defaultIcon?: string;
-  callToAction1?: CallToAction;
-  callToAction2?: CallToAction;
-  isReversed?: boolean;
-  isBeforeContent?: boolean;
-  isAfterContent?: boolean;
+  callToAction?: ActionLink;
+  hasRibbon?: boolean;
+  ribbonTitle?: string;
 }
-
-export interface Faqs extends Omit<Headline, 'classes'>, Widget {
-  iconUp?: string;
-  iconDown?: string;
-  items?: Array<Item>;
-  columns?: number;
-}
-
-export interface Steps extends Omit<Headline, 'classes'>, Widget {
-  items: Array<{
-    title: string;
-    description?: string;
-    icon?: string;
-    classes?: Record<string, string>;
-  }>;
-  callToAction?: string | CallToAction;
-  image?: string | Image;
-  isReversed?: boolean;
-}
-
-export interface Content extends Omit<Headline, 'classes'>, Widget {
-  content?: string;
-  image?: string | unknown;
-  items?: Array<Item>;
-  columns?: number;
-  isReversed?: boolean;
-  isAfterContent?: boolean;
-  callToAction?: CallToAction;
-}
-
-export interface Contact extends Omit<Headline, 'classes'>, Form, Widget {}

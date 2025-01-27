@@ -11,9 +11,11 @@ import icon from 'astro-icon';
 import compress from 'astro-compress';
 import type { AstroIntegration } from 'astro';
 
-import astrowind from './vendor/integration';
+// import astrowind from './vendor/integration'; // ★ astrowind を削除
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin, lazyImagesRehypePlugin } from './src/utils/frontmatter';
+
+import starlight from '@astrojs/starlight';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,28 +33,27 @@ export default defineConfig({
     sitemap(),
     mdx(),
     icon({
-      include: {
-        tabler: ['*'],
-        'flat-color-icons': [
-          'template',
-          'gallery',
-          'approval',
-          'document',
-          'advertising',
-          'currency-exchange',
-          'voice-presentation',
-          'business-contact',
-          'database',
+      include: ['tabler:*'],
+      iconDir: 'src/assets/icons',
+      svgoOptions: {
+        multipass: true,
+        plugins: [
+          {
+            name: 'preset-default',
+            params: {
+              overrides: {
+                removeViewBox: false,
+              },
+            },
+          },
         ],
       },
     }),
-
     ...whenExternalScripts(() =>
       partytown({
         config: { forward: ['dataLayer.push'] },
       })
     ),
-
     compress({
       CSS: true,
       HTML: {
@@ -65,9 +66,8 @@ export default defineConfig({
       SVG: false,
       Logger: 1,
     }),
-
-    astrowind({
-      config: './src/config.yaml',
+    starlight({
+      title: 'Astrowind',
     }),
   ],
 

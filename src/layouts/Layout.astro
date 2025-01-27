@@ -1,16 +1,18 @@
 ---
 import '~/assets/styles/tailwind.css';
 
-import { I18N } from 'astrowind:config';
+import { I18N } from '~/config';
 
 import CommonMeta from '~/components/common/CommonMeta.astro';
 import Favicons from '~/components/Favicons.astro';
 import CustomStyles from '~/components/CustomStyles.astro';
 import ApplyColorMode from '~/components/common/ApplyColorMode.astro';
+import JsonLd from '~/components/common/JsonLd.astro';
 import Metadata from '~/components/common/Metadata.astro';
 import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
+import WebVitals from '~/components/common/WebVitals.astro';
 
 // Comment the line below to disable View Transitions
 import { ClientRouter } from 'astro:transitions';
@@ -32,9 +34,17 @@ const { language, textDirection } = I18N;
     <Favicons />
     <CustomStyles />
     <ApplyColorMode />
+    <JsonLd 
+      title={metadata?.title}
+      description={metadata?.description}
+      type={metadata?.type || 'website'}
+      publishDate={metadata?.publishDate}
+      updateDate={metadata?.updateDate}
+    />
     <Metadata {...metadata} />
     <SiteVerification />
     <Analytics />
+    <WebVitals />
 
     <!-- Comment the line below to disable View Transitions -->
     <ClientRouter fallback="swap" />

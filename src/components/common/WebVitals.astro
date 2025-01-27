@@ -1,0 +1,34 @@
+---
+---
+
+<script>
+import { onCLS, onFID, onLCP } from 'web-vitals';
+
+type MatomoCommand = [string, ...unknown[]];
+
+declare global {
+  interface Window {
+    _paq: MatomoCommand[];
+  }
+}
+
+function sendToAnalytics(metric: { name: string; value: number; }) {
+  // Matomoにデータを送信
+  const _paq = (window._paq = window._paq || []);
+  _paq.push(['trackEvent', 'Web Vitals', metric.name, metric.value.toString()]);
+
+  // コンソールにも出力（開発時のデバッグ用）
+  if (import.meta.env.DEV) {
+    console.log({
+      name: metric.name,
+      value: metric.value,
+      timestamp: new Date().toISOString()
+    });
+  }
+}
+
+// Core Web Vitalsの計測
+onCLS(sendToAnalytics);
+onFID(sendToAnalytics);
+onLCP(sendToAnalytics);
+</script>

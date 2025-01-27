@@ -1,0 +1,90 @@
+---
+import { Schema } from 'astro-seo-schema';
+import { SITE, METADATA } from '~/config';
+import type { WithContext, WebSite, WebPage, Organization, BreadcrumbList, Article, ListItem, ImageObject } from 'schema-dts';
+
+const { title, description, image, type = 'website', publishedDate, modifiedDate } = Astro.props;
+
+const website: WithContext<WebSite> = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.site,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${SITE.site}/search?q={search_term_string}`,
+    description: 'Site search'
+  }
+};
+
+const organization: WithContext<Organization> = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${SITE.site}/#organization`,
+  name: SITE.name,
+  url: SITE.site,
+  logo: {
+    '@type': 'ImageObject',
+    url: new URL('/assets/favicons/favicon.svg', Astro.site).toString(),
+  } as ImageObject
+};
+
+const breadcrumbList: WithContext<BreadcrumbList> = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: SITE.site
+    } as ListItem,
+    ...(title ? [{
+      '@type': 'ListItem',
+      position: 2,
+      name: title,
+      item: Astro.url.toString()
+    } as ListItem] : [])
+  ]
+};
+
+const pageOrArticle: WithContext<WebPage | Article> = {
+  '@context': 'https://schema.org',
+  '@type': type === 'article' ? 'Article' : 'WebPage',
+  name: title,
+  headline: title,
+  description: description || METADATA.description,
+  inLanguage: 'ja',
+  url: Astro.url.toString(),
+  mainEntity: {
+    '@type': 'WebPage',
+    '@id': Astro.url.toString()
+  },
+  ...(image && {
+    image: {
+      '@type': 'ImageObject',
+      url: new URL(image, Astro.site).toString()
+    } as ImageObject
+  }),
+  ...(type === 'article' && {
+    datePublished: publishedDate,
+    dateModified: modifiedDate || publishedDate,
+    author: {
+      '@type': 'Organization',
+      name: SITE.name
+    } as Organization,
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      logo: {
+        '@type': 'ImageObject',
+        url: new URL('/assets/favicons/favicon.svg', Astro.site).toString()
+      } as ImageObject
+    } as Organization
+  })
+};
+
+const schemas = [website, organization, breadcrumbList, pageOrArticle];
+---
+
+{schemas.map(schema => <Schema item={schema} />)}
