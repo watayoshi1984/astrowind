@@ -1,0 +1,153 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CompanyHistory from '~/components/ui/CompanyHistory.astro';
+import Hero from '~/components/widgets/Hero.astro';
+
+import { SITE, METADATA } from '~/config';
+
+const metadata = {
+  title: '会社概要 | Company Name',
+  description: METADATA.description.company,
+  breadcrumb: [
+    {
+      text: '企業情報',
+      href: '/company',
+    },
+    {
+      text: '会社概要',
+      href: '/company/about',
+    },
+  ],
+};
+
+const companyInfo = [
+  { label: '社名', value: SITE.company.name },
+  { label: '設立', value: SITE.company.foundation },
+  { label: '所在地', value: SITE.company.address },
+  { label: '電話番号', value: SITE.company.phone },
+  { label: '事業内容', value: 'ビジネスコンサルティング、システム開発、デジタルマーケティング' },
+  { label: '従業員数', value: '150名（2024年1月現在）' },
+  { label: '資本金', value: '1億円' },
+  { label: '取引銀行', value: '○○銀行、△△銀行' },
+];
+
+const history = [
+  { date: '2024年1月', text: '本社を移転' },
+  { date: '2023年4月', text: '資本金を1億円に増資' },
+  { date: '2022年7月', text: 'デジタルマーケティング事業部を設立' },
+  { date: '2021年4月', text: 'システム開発事業部を設立' },
+  { date: '2020年1月', text: '株式会社として設立' },
+];
+---
+
+<Layout metadata={metadata}>
+  <!-- ヒーローセクション -->
+  <Hero
+    title="会社概要"
+    subtitle="革新的なソリューションで、お客様のビジネスの成長を支援します"
+  />
+
+  <!-- 企業理念 -->
+  <Content
+    title="企業理念"
+    subtitle="Mission & Vision"
+    items={[
+      {
+        title: 'ミッション',
+        description: 'テクノロジーの力で、ビジネスと社会の発展に貢献する',
+      },
+      {
+        title: 'ビジョン',
+        description: '2030年までに、1万社の企業のデジタル変革を支援する',
+      },
+      {
+        title: 'バリュー',
+        description: '革新性、誠実性、協調性を大切にし、常にお客様目線で考え行動する',
+      },
+    ]}
+  />
+
+  <!-- 会社情報 -->
+  <Features
+    title="会社情報"
+    columns={2}
+    items={companyInfo.map(({ label, value }) => ({
+      title: label,
+      description: value,
+    }))}
+  />
+
+  <!-- 実績 -->
+  <Stats
+    title="事業実績"
+    stats={[
+      { title: '顧客企業数', amount: '1000+' },
+      { title: 'プロジェクト完遂率', amount: '99%' },
+      { title: 'リピート率', amount: '95%' },
+      { title: '顧客満足度', amount: '4.8/5.0' },
+    ]}
+  />
+
+  <!-- 沿革 -->
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl mb-4">沿革</h2>
+      <p class="text-xl text-gray-600">Company History</p>
+    </div>
+    <CompanyHistory 
+      items={history}
+      classes={{
+        container: 'max-w-3xl mx-auto',
+        date: 'text-primary',
+        text: 'text-gray-600 dark:text-gray-400'
+      }}
+    />
+  </div>
+
+  <!-- アクセス -->
+  <Features
+    title="アクセス"
+    subtitle="本社所在地"
+    columns={1}
+    items={[
+      {
+        title: SITE.company.address,
+        description: `
+          【最寄り駅】
+          - ○○線××駅から徒歩5分
+          
+          【バスをご利用の場合】
+          - ○○バス停から徒歩1分
+        `,
+        icon: 'tabler:map-pin',
+      },
+    ]}
+  />
+
+  <!-- 認証・資格 -->
+  <Features
+    title="認証・資格"
+    subtitle="取得認証一覧"
+    columns={3}
+    items={[
+      {
+        title: 'ISO 9001',
+        description: '品質マネジメントシステム',
+        icon: 'tabler:certificate',
+      },
+      {
+        title: 'ISO 27001',
+        description: '情報セキュリティマネジメントシステム',
+        icon: 'tabler:shield-check',
+      },
+      {
+        title: 'プライバシーマーク',
+        description: '個人情報保護マネジメントシステム',
+        icon: 'tabler:shield-lock',
+      },
+    ]}
+  />
+</Layout>

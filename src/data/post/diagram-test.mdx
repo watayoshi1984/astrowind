@@ -1,0 +1,61 @@
+---
+title: 'ダイアグラムテスト'
+description: 'マーメイドとPlantUMLのテスト'
+publishDate: 2025-01-28T00:00:00Z
+category: 'Technical'
+tags: ['diagram', 'mermaid', 'plantuml']
+---
+
+import { Image } from 'astro:assets';
+import defaultImage from '~/assets/images/default.png';
+
+# ダイアグラムテスト
+
+## 画像テスト
+
+<div class="my-8">
+  <Image
+    src={defaultImage}
+    alt="Default image"
+    width={800}
+    height={400}
+    quality={80}
+    format="avif"
+    loading="eager"
+  />
+</div>
+
+## フローチャート（Mermaid）
+
+```mermaid
+graph TD
+  A[Start] --> B[Decision]
+  B --> |Yes| C[Process 1]
+  B --> |No| D[Process 2]
+  C --> E[End]
+  D --> E
+```
+```mermaid preview-mermaid
+sequenceDiagram
+  participant Browser
+  participant Server
+  participant DB
+  
+  Browser->>Server: Request Page
+  Server->>DB: Get Data
+  DB-->>Server: Return Data
+  Server-->>Browser: Display Page
+```
+
+## シーケンス図（Mermaid）
+
+```mermaid
+sequenceDiagram
+  participant Browser
+  participant Server
+  participant DB
+  
+  Browser->>Server: Request Page
+  Server->>DB: Get Data
+  DB-->>Server: Return Data
+  Server-->>Browser: Display Page

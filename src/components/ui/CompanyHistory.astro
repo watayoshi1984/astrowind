@@ -1,0 +1,50 @@
+---
+import { twMerge } from 'tailwind-merge';
+
+export interface HistoryItem {
+  date: string;
+  text: string;
+}
+
+export interface Props {
+  items?: Array<HistoryItem>;
+  classes?: Record<string, string>;
+}
+
+const { items = [], classes = {} } = Astro.props;
+
+const {
+  container: containerClass = '',
+  panel: panelClass = '',
+  date: dateClass = '',
+  text: textClass = '',
+} = classes;
+---
+
+{
+  items && items.length && (
+    <div class={containerClass}>
+      {items.map(({ date, text }, index = 0) => (
+        <div
+          class={twMerge(
+            'flex intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade',
+            panelClass
+          )}
+        >
+          <div class="flex flex-col items-center mr-4 rtl:mr-0 rtl:ml-4">
+            <div>
+              <div class="flex items-center justify-center">
+                <div class="w-3 h-3 rounded-full bg-primary"></div>
+              </div>
+            </div>
+            {index !== items.length - 1 && <div class="w-px h-full bg-black/10 dark:bg-slate-400/50" />}
+          </div>
+          <div class={`pt-1 ${index !== items.length - 1 ? 'pb-8' : ''}`}>
+            <p class={twMerge('text-xl font-bold', dateClass)} set:html={date} />
+            <p class={twMerge('text-muted mt-2', textClass)} set:html={text} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}

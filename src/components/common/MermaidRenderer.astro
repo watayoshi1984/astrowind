@@ -1,0 +1,52 @@
+---
+---
+<script is:inline>
+window.addEventListener('load', function() {
+  document.querySelectorAll('pre > code.language-mermaid.preview-mermaid').forEach(block => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+    script.onload = () => {
+      try {
+        window.mermaid.initialize({
+          startOnLoad: true,
+          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
+          securityLevel: 'loose',
+          fontFamily: '"Noto Sans JP", sans-serif'
+        });
+        block.innerHTML = block.textContent;
+      } catch (error) {
+        console.error('Error initializing Mermaid:', error);
+      }
+    };
+    script.onerror = () => {
+      console.error('Error loading Mermaid library.');
+    };
+    document.head.appendChild(script);
+  });
+});
+
+// ダークモード切り替えの監視
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.target.classList.contains('dark') && window.mermaid) {
+      window.mermaid.initialize({
+        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
+      });
+    }
+  });
+});
+
+observer.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['class']
+});
+</script>
+
+<style is:global>
+.mermaid {
+  background: transparent !important;
+}
+.dark .mermaid {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+</style>

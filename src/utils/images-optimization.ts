@@ -289,6 +289,23 @@ export async function getImagesOptimized(
   }: ImageProps,
   transform: ImagesOptimizer = () => Promise.resolve([])
 ): Promise<{ src: string; attributes: HTMLAttributes<'img'> }> {
+  if (typeof image === 'string' && image.includes('/favicons/')) {
+    return {
+      src: image,
+      attributes: {
+        width: width,
+        height: height,
+        style: `${getStyle({
+          width: width,
+          height: height,
+          aspectRatio: aspectRatio,
+          objectPosition: objectPosition,
+          layout: layout,
+        })}${style ?? ''}`,
+        ...rest,
+      },
+    };
+  }
   if (typeof image !== 'string') {
     width ||= Number(image.width) || undefined;
     height ||= typeof width === 'number' ? computeHeight(width, image.width / image.height) : undefined;

@@ -8,12 +8,32 @@ import compress from 'astro-compress';
 import prefetch from '@astrojs/prefetch';
 import robotsTxt from 'astro-robots-txt';
 import { fileURLToPath } from 'url';
+import remarkMermaid from 'remark-mermaid';
+import { remarkKroki } from 'remark-kroki';
 
 // astro.config.mjs
 export default defineConfig({
   site: 'https://astrowind.vercel.app',
+  markdown: {
+    shikiConfig: {
+      theme: 'dracula',
+      wrap: true,
+    },
+  },
   integrations: [
-    mdx(),
+    mdx({
+      remarkPlugins: [
+        [remarkMermaid, {
+          simple: false,
+          mermaidConfig: {
+            theme: 'default',
+            themeVariables: {
+              'fontFamily': 'system-ui, sans-serif'
+            }
+          }
+        }],
+      ],
+    }),
     tailwind(),
     icon({
       include: {
@@ -52,7 +72,13 @@ export default defineConfig({
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp'
-    }
+    },
+    format: ['avif', 'webp'],
+    quality: 80,
+    densities: [1, 2],
+    fallbackFormat: 'png',
+    supported: ['png', 'jpg', 'jpeg', 'webp', 'avif'],
+    includeSourceFormat: false
   },
   vite: {
     ssr: {

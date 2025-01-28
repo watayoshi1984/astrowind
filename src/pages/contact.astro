@@ -1,78 +1,148 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import HeroText from '~/components/widgets/HeroText.astro';
-import ContactUs from '~/components/widgets/Contact.astro';
-import Features2 from '~/components/widgets/Features2.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features from '~/components/widgets/Features.astro';
+import Form from '~/components/ui/Form.astro';
+
+import { SITE } from '~/config';
 
 const metadata = {
-  title: 'Contact',
+  title: 'お問い合わせ | Company Name',
+  description: 'お客様のご要望やご質問について、お気軽にお問い合わせください。専門スタッフが丁寧にご対応いたします。',
+  breadcrumb: [
+    {
+      text: 'お問い合わせ',
+      href: '/contact',
+    },
+  ],
 };
+
+const formItems = [
+  {
+    type: 'text',
+    name: 'company',
+    label: '会社名',
+    placeholder: '株式会社○○',
+    required: true,
+  },
+  {
+    type: 'text',
+    name: 'name',
+    label: 'お名前',
+    placeholder: '山田 太郎',
+    required: true,
+  },
+  {
+    type: 'email',
+    name: 'email',
+    label: 'メールアドレス',
+    placeholder: 'you@example.com',
+    required: true,
+  },
+  {
+    type: 'tel',
+    name: 'phone',
+    label: '電話番号',
+    placeholder: '03-0000-0000',
+    required: false,
+  },
+  {
+    type: 'select',
+    name: 'inquiry_type',
+    label: 'お問い合わせ内容',
+    required: true,
+    options: [
+      { value: '', label: '選択してください' },
+      { value: 'consulting', label: 'コンサルティングについて' },
+      { value: 'development', label: 'システム開発について' },
+      { value: 'marketing', label: 'デジタルマーケティングについて' },
+      { value: 'other', label: 'その他' },
+    ],
+  },
+  {
+    type: 'textarea',
+    name: 'message',
+    label: 'お問い合わせ詳細',
+    placeholder: 'ご質問・ご要望の詳細をご記入ください',
+    required: true,
+  },
+];
 ---
 
 <Layout metadata={metadata}>
-  <!-- HeroText Widget ******************* -->
-
-  <HeroText tagline="Contact" title="Let's Connect!" />
-
-  <ContactUs
-    id="form"
-    title="Drop us a message today!"
-    subtitle="For quicker answers, explore our FAQs section. You may find the solution you're looking  for right there! If not, our support team is delighted to help you."
-    inputs={[
-      {
-        type: 'text',
-        name: 'name',
-        label: 'Name',
-      },
-      {
-        type: 'email',
-        name: 'email',
-        label: 'Email',
-      },
-    ]}
-    textarea={{
-      label: 'Message',
-    }}
-    disclaimer={{
-      label:
-        'By submitting this contact form, you acknowledge and agree to the collection of your personal information.',
-    }}
-    description="Our support team typically responds within 24 business hours."
+  <!-- ヒーローセクション -->
+  <Hero
+    title="お問い合わせ"
+    subtitle="お気軽にご相談ください"
   />
 
-  <!-- Features2 Widget ************** -->
+  <!-- お問い合わせフォーム -->
+  <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mb-12">
+      <Features
+        title="お問い合わせ方法"
+        subtitle="以下のフォームまたは電話・メールにてお問い合わせください"
+        columns={2}
+        items={[
+          {
+            title: '電話でのお問い合わせ',
+            description: `
+              ${SITE.company.phone}
+              受付時間: 平日 9:00〜18:00
+            `,
+            icon: 'tabler:phone',
+          },
+          {
+            title: 'メールでのお問い合わせ',
+            description: SITE.company.email,
+            icon: 'tabler:mail',
+          },
+        ]}
+      />
+    </div>
 
-  <Features2
-    title="We are here to help!"
+    <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8">
+      <Form
+        inputs={formItems}
+        btnText="送信する"
+        description="* は必須項目です"
+        embedReCaptcha={true}
+      >
+        <Fragment slot="info">
+          <div class="text-sm text-gray-600 dark:text-gray-400 mt-6">
+            <p>お問い合わせいただいた内容につきましては、2営業日以内に返信いたします。</p>
+            <p class="mt-2">
+              ご入力いただいた個人情報は、お問い合わせへの対応のみに使用し、
+              <a href="/privacy" class="text-primary hover:underline">プライバシーポリシー</a>
+              に基づき適切に管理いたします。
+            </p>
+          </div>
+        </Fragment>
+      </Form>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <Features
+    title="よくある質問"
+    subtitle="お問い合わせの前にご確認ください"
+    columns={2}
     items={[
       {
-        title: 'General support',
-        description: `Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.`,
+        title: '初回相談は無料ですか？',
+        description: 'はい、初回のご相談は無料です。お気軽にお問い合わせください。',
       },
       {
-        title: 'Contact sales',
-        description:
-          'Chat with us for questions about purchases, customization options, licensing for commercial use, inquiries about specific template, etc.',
+        title: '対応エリアはどこまでですか？',
+        description: '全国対応可能です。オンラインでのご相談も承っております。',
       },
       {
-        title: 'Technical support',
-        description:
-          'Chat with us when facing issues like template installation, problems editing difficulties, compatibility issues with software or download errors, or other technical challenges related to using the templates.',
+        title: '見積もりは無料ですか？',
+        description: 'はい、お見積りは無料です。ご要望をお伺いした上で、詳細なお見積りをご提示いたします。',
       },
       {
-        title: 'Phone',
-        description: '+1 (234) 567-890',
-        icon: 'tabler:headset',
-      },
-      {
-        title: 'Email',
-        description: 'contact@support.com',
-        icon: 'tabler:mail',
-      },
-      {
-        title: 'Location',
-        description: '1234 Lorem Ipsum St, 12345, Miami, EEUU',
-        icon: 'tabler:map-pin',
+        title: '相談から契約までの流れは？',
+        description: 'お問い合わせ → 初回相談 → 要件定義 → お見積り → ご契約の流れとなります。',
       },
     ]}
   />

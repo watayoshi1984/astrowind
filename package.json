@@ -73,5 +73,9 @@
     "typescript": "^5.3.3",
     "typescript-eslint": "^0.0.1-alpha.0",
     "unist-util-visit": "^5.0.0"
+,
+    "remark-mermaid": "^0.2.0",
+    "remark-kroki": "^0.2.6",
+    "remark-kroki-plugin": "^0.1.1"
   }
 }

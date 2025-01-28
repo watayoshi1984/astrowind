@@ -24,6 +24,18 @@ const {
   twitter = {},
 } = Astro.props;
 
+const currentPath = new URL(Astro.url.pathname, Astro.site).pathname;
+const isCompanyPage = currentPath.startsWith('/company/');
+const isBlogPage = currentPath.startsWith('/blog/');
+
+// パスに基づいて適切な説明文を選択
+const getContextualDescription = () => {
+  if (description) return description;
+  if (isCompanyPage) return METADATA.description.company;
+  if (isBlogPage) return METADATA.description.blog;
+  return METADATA.description.default;
+};
+
 const seoProps: AstroSeoProps = merge(
   {
     title: '',
@@ -36,19 +48,20 @@ const seoProps: AstroSeoProps = merge(
       url: canonical,
       site_name: SITE?.name,
       images: [],
-      locale: I18N?.language || 'en',
+      locale: I18N?.language || 'ja',
       type: 'website',
     },
     twitter: {
       cardType: openGraph?.images?.length ? 'summary_large_image' : 'summary',
     },
+    facebook: METADATA.facebook,
   },
   {
     title: METADATA?.title?.default,
     titleTemplate: METADATA?.title?.template,
     noindex: typeof METADATA?.robots?.index !== 'undefined' ? !METADATA.robots.index : undefined,
     nofollow: typeof METADATA?.robots?.follow !== 'undefined' ? !METADATA.robots.follow : undefined,
-    description: METADATA?.description,
+    description: getContextualDescription(),
     openGraph: METADATA?.openGraph,
     twitter: METADATA?.twitter,
   },
@@ -59,10 +72,56 @@ const seoProps: AstroSeoProps = merge(
     noindex: typeof robots?.index !== 'undefined' ? !robots.index : undefined,
     nofollow: typeof robots?.follow !== 'undefined' ? !robots.follow : undefined,
     description: description,
-    openGraph: { url: canonical, ...openGraph },
+    openGraph: {
+      url: canonical,
+      ...openGraph,
+      // ホームページの場合はwebsite、ブログ記事の場合はarticleを設定
+      type: isBlogPage ? 'article' : 'website',
+    },
     twitter: twitter,
   }
 );
 ---
 
 <AstroSeo {...{ ...seoProps, openGraph: await adaptOpenGraphImages(seoProps?.openGraph, Astro.site) }} />
+
+<!-- 構造化データの追加 -->
+{
+  SITE.company && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      'name': SITE.company.name,
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': SITE.company.address
+      },
+      'telephone': SITE.company.phone,
+      'email': SITE.company.email,
+      'foundingDate': SITE.company.foundation,
+      'taxID': SITE.company.registration,
+      'url': SITE.site,
+      'sameAs': [
+        SITE.social?.twitter,
+        SITE.social?.facebook,
+        SITE.social?.linkedin
+      ].filter(Boolean)
+    })} />
+  )
+}
+
+<!-- PWA対応のためのマニフェストファイル -->
+<link rel="manifest" href="/manifest.json" />
+
+<!-- モバイル対応のメタタグ -->
+<meta name="format-detection" content="telephone=no" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+<!-- DNS Prefetch -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="preconnect" href="//fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="//fonts.gstatic.com" crossorigin />

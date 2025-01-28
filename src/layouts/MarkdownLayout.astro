@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-
+import MermaidRenderer from '~/components/common/MermaidRenderer.astro';
+import PlantUMLRenderer from '~/components/common/PlantUMLRenderer.astro';
 import type { MetaData } from '~/types';
 
 export interface Props {
@@ -25,4 +26,6 @@ const metadata: MetaData = {
       <slot />
     </div>
   </section>
+  <MermaidRenderer />
+  <PlantUMLRenderer />
 </Layout>
