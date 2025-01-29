@@ -18,15 +18,30 @@
   .text-muted {
     color: var(--aw-color-text-muted);
   }
+  .leading-tighter {
+    line-height: 1.1;
+  }
+  .fill-primary\/10 {
+    fill: var(--aw-color-primary);
+    opacity: 0.1;
+  }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
+    @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600;
+  }
+
+  .btn-ghost {
+    @apply border-none shadow-none text-gray-600 hover:text-gray-900;
   }
 
   .btn-primary {
-    @apply btn font-semibold bg-primary text-white border-primary hover:bg-secondary hover:border-secondary hover:text-white dark:text-white dark:bg-primary dark:border-primary dark:hover:border-secondary dark:hover:bg-secondary;
+    @apply font-semibold bg-primary text-white border-primary hover:bg-blue-900 hover:border-blue-900 hover:text-white;
+  }
+
+  .btn-primary-outline {
+    @apply font-semibold bg-transparent text-primary border-primary hover:bg-primary hover:text-white;
   }
 
   .btn-secondary {
@@ -43,7 +58,7 @@
   box-shadow: 0 0.375rem 1.5rem 0 rgb(140 152 164 / 13%);
 }
 .dark #header.scroll > div:first-child,
-#header.scroll.dark > div:first-child {
+[data-theme='dark'] #header.scroll > div:first-child {
   @apply bg-page md:bg-[#030621e6] border-b border-gray-500/20;
   box-shadow: none;
 }
@@ -89,4 +104,163 @@
 
 .dd *:first-child {
   margin-top: 0;
+}
+
+/* Basic content styles */
+[data-aw-styled-content] h1,
+[data-aw-styled-content] h2,
+[data-aw-styled-content] h3,
+[data-aw-styled-content] h4,
+[data-aw-styled-content] h5,
+[data-aw-styled-content] h6 {
+  @apply font-bold leading-tighter tracking-tighter mb-4 mt-8;
+}
+
+[data-aw-styled-content] h1 {
+  @apply text-4xl;
+}
+
+[data-aw-styled-content] h2 {
+  @apply text-3xl;
+}
+
+[data-aw-styled-content] h3 {
+  @apply text-2xl;
+}
+
+[data-aw-styled-content] h4 {
+  @apply text-xl;
+}
+
+[data-aw-styled-content] h5 {
+  @apply text-lg;
+}
+
+[data-aw-styled-content] h6 {
+  @apply text-base;
+}
+
+[data-aw-styled-content] p {
+  @apply mb-4;
+}
+
+[data-aw-styled-content] ul {
+  @apply mb-4 ml-4 list-disc;
+}
+
+[data-aw-styled-content] ol {
+  @apply mb-4 ml-4 list-decimal;
+}
+
+[data-aw-styled-content] li {
+  @apply mb-2;
+}
+
+[data-aw-styled-content] blockquote {
+  @apply mb-4 ml-4 pl-4 border-l-4 border-gray-300;
+}
+
+[data-aw-styled-content] pre {
+  @apply mb-4 p-4 bg-gray-100 rounded-lg overflow-x-auto;
+}
+
+[data-aw-styled-content] code {
+  @apply text-sm font-mono bg-gray-100 px-1 py-0.5 rounded;
+}
+
+[data-aw-styled-content] pre code {
+  @apply bg-transparent px-0 py-0;
+}
+
+[data-aw-styled-content] a {
+  @apply text-primary hover:underline;
+}
+
+[data-aw-styled-content] img {
+  @apply max-w-full rounded-lg my-4;
+}
+
+[data-aw-styled-content] hr {
+  @apply my-8 border-gray-200;
+}
+
+/* Mermaid styles */
+.mermaid {
+  @apply my-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md;
+}
+
+.mermaid svg {
+  @apply mx-auto;
+}
+
+.mermaid .label {
+  @apply font-sans text-sm;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  @apply fill-white dark:fill-gray-800 stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .edgePath .path {
+  @apply stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .edgeLabel {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.mermaid .cluster rect {
+  @apply fill-gray-100 dark:fill-gray-700 stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .cluster text {
+  @apply fill-gray-800 dark:fill-gray-200;
+}
+
+.mermaid text.actor {
+  @apply fill-gray-800 dark:fill-gray-200;
+}
+
+.mermaid .actor-line {
+  @apply stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  @apply stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .messageText {
+  @apply fill-gray-800 dark:fill-gray-200;
+}
+
+.mermaid .labelBox {
+  @apply stroke-primary dark:stroke-blue-400 fill-primary/10 dark:fill-blue-400/10;
+}
+
+.mermaid .labelText,
+.mermaid .labelText > tspan {
+  @apply fill-gray-800 dark:fill-gray-200;
+}
+
+.mermaid .loopText,
+.mermaid .loopText > tspan {
+  @apply fill-gray-800 dark:fill-gray-200;
+}
+
+.mermaid .loopLine {
+  @apply stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .note {
+  @apply fill-yellow-100 dark:fill-yellow-900 stroke-gray-800 dark:stroke-gray-200;
+}
+
+.mermaid .noteText,
+.mermaid .noteText > tspan {
+  @apply fill-gray-800 dark:fill-gray-200;
 }

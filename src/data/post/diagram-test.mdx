@@ -1,13 +1,16 @@
 ---
+layout: ~/layouts/MarkdownLayout.astro
 title: 'ダイアグラムテスト'
-description: 'マーメイドとPlantUMLのテスト'
+description: 'マーメイドダイアグラムのテスト'
 publishDate: 2025-01-28T00:00:00Z
 category: 'Technical'
-tags: ['diagram', 'mermaid', 'plantuml']
+tags: ['diagram', 'mermaid']
+image: '../../assets/images/default.png'
 ---
 
 import { Image } from 'astro:assets';
-import defaultImage from '~/assets/images/default.png';
+import defaultImage from '../../assets/images/default.png';
+import MermaidRenderer from '../../components/MermaidRenderer.astro';
 
 # ダイアグラムテスト
 
@@ -25,37 +28,81 @@ import defaultImage from '~/assets/images/default.png';
   />
 </div>
 
-## フローチャート（Mermaid）
+## フローチャート
 
-```mermaid
-graph TD
-  A[Start] --> B[Decision]
-  B --> |Yes| C[Process 1]
-  B --> |No| D[Process 2]
-  C --> E[End]
-  D --> E
-```
-```mermaid preview-mermaid
+<MermaidRenderer code={`
+graph LR
+    A[開始] --> B{条件分岐}
+    B -->|はい| C[処理1]
+    B -->|いいえ| D[処理2]
+    C --> E[終了]
+    D --> E
+`} />
+
+## シーケンス図
+
+<MermaidRenderer code={`
 sequenceDiagram
-  participant Browser
-  participant Server
-  participant DB
-  
-  Browser->>Server: Request Page
-  Server->>DB: Get Data
-  DB-->>Server: Return Data
-  Server-->>Browser: Display Page
-```
+    participant ブラウザ
+    participant サーバー
+    participant データベース
+    
+    ブラウザ->>サーバー: ページリクエスト
+    サーバー->>データベース: データ取得
+    データベース-->>サーバー: データ返却
+    サーバー-->>ブラウザ: ページ表示
+`} />
 
-## シーケンス図（Mermaid）
+## クラス図
 
-```mermaid
-sequenceDiagram
-  participant Browser
-  participant Server
-  participant DB
-  
-  Browser->>Server: Request Page
-  Server->>DB: Get Data
-  DB-->>Server: Return Data
-  Server-->>Browser: Display Page
+<MermaidRenderer code={`
+classDiagram
+    direction LR
+    class User {
+        +name
+        +email
+        +register()
+        +login()
+    }
+    class Article {
+        +title
+        +content
+        +post()
+    }
+    User "1" -- "*" Article : posts
+`} />
+
+## ガントチャート
+
+<MermaidRenderer code={`
+gantt
+    title プロジェクトスケジュール
+    dateFormat YYYY-MM-DD
+    section フェーズ1
+    要件定義    :2024-01-01, 30d
+    設計        :2024-02-01, 45d
+    section フェーズ2
+    開発        :2024-03-15, 60d
+    テスト      :2024-05-15, 30d
+    リリース    :2024-06-15, 7d
+`} />
+
+## マインドマップ
+
+<MermaidRenderer code={`
+mindmap
+    root((プロジェクト管理))
+        スコープ
+            要件定義
+            機能仕様
+        スケジュール
+            マイルストーン
+            タスク管理
+        リソース
+            人材
+            予算
+        品質
+            テスト
+            レビュー
+`} />
+

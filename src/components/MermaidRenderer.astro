@@ -1,0 +1,81 @@
+---
+const { code } = Astro.props;
+---
+
+<div class="mermaid-wrapper">
+  <div class="mermaid">
+    {code}
+  </div>
+</div>
+
+<script>
+  import mermaid from 'mermaid';
+
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    themeVariables: {
+      fontFamily: 'var(--aw-font-sans)',
+      fontSize: '14px',
+    },
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      curve: 'basis',
+      padding: 8,
+    },
+    sequence: {
+      useMaxWidth: true,
+      diagramMarginX: 50,
+      diagramMarginY: 10,
+      actorMargin: 50,
+      boxMargin: 10,
+      messageMargin: 35,
+      mirrorActors: true,
+    },
+    gantt: {
+      useMaxWidth: true,
+      topPadding: 50,
+      leftPadding: 75,
+    },
+    mindmap: {
+      useMaxWidth: true,
+      padding: 8,
+    },
+    classDiagram: {
+      useMaxWidth: true,
+      diagramPadding: 8,
+    }
+  });
+</script>
+
+<style>
+  .mermaid-wrapper {
+    @apply w-full max-w-4xl mx-auto my-8;
+  }
+  .mermaid {
+    @apply p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-x-auto;
+  }
+  :global(.mermaid svg) {
+    @apply max-w-full h-auto mx-auto;
+  }
+  :global(.mermaid .label) {
+    @apply font-sans text-sm;
+  }
+  :global(.mermaid .node rect) {
+    @apply fill-white dark:fill-gray-800 stroke-gray-800 dark:stroke-gray-200;
+  }
+  :global(.mermaid .edgePath .path) {
+    @apply stroke-gray-800 dark:stroke-gray-200;
+  }
+  :global(.mermaid .edgeLabel) {
+    @apply bg-white dark:bg-gray-800;
+  }
+  :global(.mermaid .classText) {
+    @apply text-sm;
+  }
+  :global(.mermaid .classLabel) {
+    @apply text-sm;
+  }
+</style> 
